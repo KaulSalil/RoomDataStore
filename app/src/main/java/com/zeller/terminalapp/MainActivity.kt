@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (!binding.amountInput.text.isNullOrEmpty()) {
                     amt = binding.amountInput.text.toString().toFloat()
                     if (balance != null) {
-                        if (balance > amt) {
+                        if (balance >= amt) {
                             mainViewModel?.debitBalance(amt)
                         } else {
                             Toast.makeText(

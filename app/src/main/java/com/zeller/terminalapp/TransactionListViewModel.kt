@@ -1,7 +1,6 @@
 package com.zeller.terminalapp
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.zeller.terminalapp.db.Transaction
@@ -11,12 +10,8 @@ class TransactionListViewModel(
     private val repository: TransactionRepository
 ) : ViewModel() {
 
-    private var transactions: MutableLiveData<List<Transaction>> =
-        MutableLiveData<List<Transaction>>()
-
-
     //To Prevent the view from directly modifying the underlying livedata
-    fun getTransactions(): LiveData<List<Transaction>>? {
+    fun getTransactions(): LiveData<List<Transaction>> {
         return repository.allTransactions
     }
 

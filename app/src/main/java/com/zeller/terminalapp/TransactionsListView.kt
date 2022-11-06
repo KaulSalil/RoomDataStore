@@ -9,9 +9,9 @@ import com.zeller.terminalapp.databinding.ActivityTransactionsListViewBinding
 
 class TransactionsListView : AppCompatActivity() {
 
-    var transactionListviewModel: TransactionListViewModel? = null
+    private var transactionListviewModel: TransactionListViewModel? = null
     private lateinit var activityTransactionsListViewBinding: ActivityTransactionsListViewBinding
-    var adapter: TransactionListAdapter? = null
+    private var adapter: TransactionListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityTransactionsListViewBinding =
