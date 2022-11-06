@@ -6,15 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".TransactionsListView">
 
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+
+            style="@style/word_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_orange_light"
+            android:text="@string/id" />
+
+        <TextView
+
+            style="@style/word_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_orange_light"
+            android:text="@string/amount" />
+
+        <TextView
+
+            style="@style/word_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_orange_light"
+
+            android:text="@string/type" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+
         android:id="@+id/transactionsRecyclerview"
-        android:layout_width="400dp"
-        android:layout_height="700dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:padding="@dimen/big_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
         tools:listitem="@layout/transaction_item" />
 
 

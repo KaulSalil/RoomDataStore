@@ -20,13 +20,13 @@ class TransactionsListView : AppCompatActivity() {
             this,
             TransactionListViewModel.TransactionListViewModelProvider((application as Application).repository)
         )[TransactionListViewModel::class.java]
-        adapter = TransactionListAdapter()
         setUpRV()
         showTransactions()
 
     }
 
     private fun setUpRV() {
+        adapter = TransactionListAdapter()
         activityTransactionsListViewBinding.transactionsRecyclerview.layoutManager =
             LinearLayoutManager(this)
         activityTransactionsListViewBinding.transactionsRecyclerview.adapter = adapter

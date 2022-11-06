@@ -7,4 +7,7 @@
     <string name="add_word">Add Word</string>
     <string name="credit">CREDIT</string>
     <string name="debit">DEBIT</string>
+    <string name="id">Id</string>
+    <string name="amount">Amount</string>
+    <string name="type">Type</string>
 </resources>
