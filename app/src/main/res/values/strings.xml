@@ -10,4 +10,5 @@
     <string name="id">Id</string>
     <string name="amount">Amount</string>
     <string name="type">Type</string>
+    <string name="no_transactions">No Transactions</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.zeller.terminalapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +36,12 @@ class TransactionsListView : AppCompatActivity() {
     private fun showTransactions() {
         transactionListviewModel?.getTransactions()?.observe(this) { transactions ->
             transactions.let {
+                if (it.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.no_transactions), Toast.LENGTH_LONG)
+                        .show()
+                    finish()
+
+                }
                 adapter?.submitList(it)
             }
 
