@@ -5,4 +5,6 @@
     <string name="deposit">Deposit</string>
     <string name="seeTransactions">See Transactions</string>
     <string name="add_word">Add Word</string>
+    <string name="credit">CREDIT</string>
+    <string name="debit">DEBIT</string>
 </resources>

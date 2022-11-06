@@ -1,11 +1,45 @@
 package com.zeller.terminalapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.zeller.terminalapp.databinding.ActivityTransactionsListViewBinding
 
 class TransactionsListView : AppCompatActivity() {
+
+    var transactionListviewModel: TransactionListViewModel? = null
+    private lateinit var activityTransactionsListViewBinding: ActivityTransactionsListViewBinding
+    var adapter: TransactionListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_transactions_list_view)
+        activityTransactionsListViewBinding =
+            ActivityTransactionsListViewBinding.inflate(layoutInflater)
+        setContentView(activityTransactionsListViewBinding.root)
+        transactionListviewModel = ViewModelProvider(
+            this,
+            TransactionListViewModel.TransactionListViewModelProvider((application as Application).repository)
+        )[TransactionListViewModel::class.java]
+        adapter = TransactionListAdapter()
+        setUpRV()
+        showTransactions()
+
     }
+
+    private fun setUpRV() {
+        activityTransactionsListViewBinding.transactionsRecyclerview.layoutManager =
+            LinearLayoutManager(this)
+        activityTransactionsListViewBinding.transactionsRecyclerview.adapter = adapter
+    }
+
+    private fun showTransactions() {
+        transactionListviewModel?.getTransactions()?.observe(this) { transactions ->
+            transactions.let {
+                adapter?.submitList(it)
+            }
+
+        }
+    }
+
+
 }
