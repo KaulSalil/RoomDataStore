@@ -1,8 +1,10 @@
 package com.zeller.terminalapp
 
+import com.zeller.terminalapp.db.Transaction
+
 class TransactionsList {
-    private val transactionsList: MutableList<Transactions> = mutableListOf()
-    fun addTransaction(transactions: Transactions) {
-        transactionsList.add(transactions)
+    private val transactionList: MutableList<Transaction> = mutableListOf()
+    fun addTransaction(transaction: Transaction) {
+        transactionList.add(transaction)
     }
 }

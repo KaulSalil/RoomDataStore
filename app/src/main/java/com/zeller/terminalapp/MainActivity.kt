@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.zeller.terminalapp.databinding.ActivityMainBinding
+import com.zeller.terminalapp.db.Transaction
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         if (balance > amt) {
                             //MainViewModel.balance -= amt
                             mainViewModel?.debitBalance(amt)
+                            mainViewModel?.transactions?.addTransaction(Transaction(amt,false))
                         } else {
                             Toast.makeText(
                                 this,
@@ -76,6 +78,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.depositButton -> {
                 if (!binding.amountInput.text.isNullOrEmpty()) {
                     amt = binding.amountInput.text.toString().toFloat()
+                    mainViewModel?.transactions?.addTransaction(Transaction(amt,true))
                     mainViewModel?.creditBalance(amt)
                 }
             }
@@ -92,7 +95,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             balance?.let {
                 binding.balance.text = it.toString()
                 mainViewModel?.transactions?.addTransaction(
-                    Transactions(
+                    Transaction(
                         isDeposit = true, amount = it
                     )
                 )
