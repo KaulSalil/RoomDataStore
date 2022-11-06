@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         //MainViewModel.balance -= amt
                         mainViewModel?.debitBalance(amt)
                     } else {
-                        Toast.makeText(this, "Not enough balance", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.not_enough_balance), Toast.LENGTH_LONG).show()
                     }
                 }
             }

@@ -33,7 +33,7 @@
         android:id="@+id/withdrawButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="Withdraw"
+        android:text="@string/withdraw"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -42,7 +42,7 @@
         android:id="@+id/depositButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="Deposit"
+        android:text="@string/deposit"
         app:layout_constraintBottom_toTopOf="@id/withdrawButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
