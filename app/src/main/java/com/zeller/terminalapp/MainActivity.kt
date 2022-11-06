@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.zeller.terminalapp.databinding.ActivityMainBinding
-import com.zeller.terminalapp.db.Transaction
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -22,38 +21,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.withdrawButton.setOnClickListener(this)
         binding.seeTransactionsButton.setOnClickListener(this)
         setContentView(binding.root)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mainViewModel = ViewModelProvider(
+            this,
+            MainViewModel.MainViewModelFactory(
+                this.application,
+                (application as Application).repository
+            )
+        )[MainViewModel::class.java]
         mainViewModel?.updateLiveDataFromDataStore()
         observeBalance()
     }
 
     override fun onClick(view: View?) {
         val amt: Float
-//        if (view?.id == R.id.withdrawButton) {
-//            val balance = mainViewModel?.balance?.value
-//            if (!binding.amountInput.text.isNullOrEmpty()) {
-//                amt = binding.amountInput.text.toString().toFloat()
-//                if (balance != null) {
-//                    if (balance > amt) {
-//                        //MainViewModel.balance -= amt
-//                        mainViewModel?.debitBalance(amt)
-//                    } else {
-//                        Toast.makeText(
-//                            this,
-//                            getString(R.string.not_enough_balance),
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                }
-//            }
-//
-//        } else if (view?.id == R.id.depositButton) {
-//            if (!binding.amountInput.text.isNullOrEmpty()) {
-//                amt = binding.amountInput.text.toString().toFloat()
-//                mainViewModel?.creditBalance(amt)
-//            }
-//        }
-
         when (view?.id) {
             R.id.withdrawButton -> {
                 val balance = mainViewModel?.balance?.value
@@ -61,9 +41,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     amt = binding.amountInput.text.toString().toFloat()
                     if (balance != null) {
                         if (balance > amt) {
-                            //MainViewModel.balance -= amt
                             mainViewModel?.debitBalance(amt)
-                            mainViewModel?.transactions?.addTransaction(Transaction(amt,false))
                         } else {
                             Toast.makeText(
                                 this,
@@ -78,7 +56,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.depositButton -> {
                 if (!binding.amountInput.text.isNullOrEmpty()) {
                     amt = binding.amountInput.text.toString().toFloat()
-                    mainViewModel?.transactions?.addTransaction(Transaction(amt,true))
                     mainViewModel?.creditBalance(amt)
                 }
             }
@@ -94,11 +71,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mainViewModel?.balance?.observe(this) { balance ->
             balance?.let {
                 binding.balance.text = it.toString()
-                mainViewModel?.transactions?.addTransaction(
-                    Transaction(
-                        isDeposit = true, amount = it
-                    )
-                )
             }
 
         }

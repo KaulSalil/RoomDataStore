@@ -9,11 +9,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.zeller.terminalapp.db.Transaction
+import com.zeller.terminalapp.db.TransactionRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
@@ -24,7 +24,8 @@ import java.io.IOException
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "balance_details")
 
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application, val repository: TransactionRepository) :
+    AndroidViewModel(application) {
     var transactions: TransactionsList = TransactionsList()
     val KEY_BALANCE = floatPreferencesKey("key_balance")
     private var _balance = MutableLiveData(0.0f)
@@ -59,6 +60,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             getApplication<Application>().dataStore.edit { balance_details ->
                 val currentBalance = balance_details[KEY_BALANCE] ?: 0.0f
                 balance_details[KEY_BALANCE] = currentBalance + amt
+                addTransaction(Transaction(amount = amt, isDeposit = true))
             }
         }
     }
@@ -68,9 +70,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             getApplication<Application>().dataStore.edit { balance_details ->
                 val currentBalance = balance_details[KEY_BALANCE] ?: 0.0f
                 balance_details[KEY_BALANCE] = currentBalance - amt
+                addTransaction(Transaction(amount = amt, isDeposit = false))
             }
         }
+    }
 
+    fun addTransaction(transaction: Transaction) {
+        viewModelScope.async {
+            repository.insertTransaction(transaction)
+        }
 
     }
+
+
+    class MainViewModelFactory(
+        val application: Application, private val repository: TransactionRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+                return MainViewModel(application = application, repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+
+    }
+
 }
+

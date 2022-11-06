@@ -4,4 +4,5 @@
     <string name="withdraw">Withdraw</string>
     <string name="deposit">Deposit</string>
     <string name="seeTransactions">See Transactions</string>
+    <string name="add_word">Add Word</string>
 </resources>
