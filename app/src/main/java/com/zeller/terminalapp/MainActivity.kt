@@ -20,25 +20,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.withdrawButton.setOnClickListener(this)
         setContentView(binding.root)
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        observeBalance()
     }
 
     override fun onClick(view: View?) {
         val amt: Float
         if (view?.id == R.id.withdrawButton) {
-            val balance = mainViewModel?.balance
+            val balance = mainViewModel?.balance?.value
             if (!binding.amountInput.text.isNullOrEmpty()) {
                 amt = binding.amountInput.text.toString().toFloat()
                 if (balance != null) {
                     if (balance > amt) {
                         //MainViewModel.balance -= amt
                         mainViewModel?.debitBalance(amt)
-                        binding.balance.text = mainViewModel?.balance.toString()
-                        mainViewModel?.transactions?.addTransaction(
-                            Transactions(
-                                isDeposit = false,
-                                amount = amt
-                            )
-                        )
                     } else {
                         Toast.makeText(this, "Not enough balance", Toast.LENGTH_LONG).show()
                     }
@@ -48,16 +42,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         } else if (view?.id == R.id.depositButton) {
             if (!binding.amountInput.text.isNullOrEmpty()) {
                 amt = binding.amountInput.text.toString().toFloat()
-                // MainViewModel.balance += amt
                 mainViewModel?.creditBalance(amt)
-                binding.balance.text = mainViewModel?.balance.toString()
+            }
+        }
+    }
+
+    private fun observeBalance() {
+        mainViewModel?.balance?.observe(this) { balance ->
+            balance?.let {
+                binding.balance.text = it.toString()
                 mainViewModel?.transactions?.addTransaction(
                     Transactions(
-                        isDeposit = true,
-                        amount = amt
+                        isDeposit = true, amount = it
                     )
                 )
             }
+
         }
     }
 }
