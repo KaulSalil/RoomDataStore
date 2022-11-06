@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.depositButton.setOnClickListener(this)
         binding.withdrawButton.setOnClickListener(this)
         setContentView(binding.root)
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mainViewModel?.updateLiveDataFromDataStore()
         observeBalance()
     }
 
@@ -34,7 +35,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         //MainViewModel.balance -= amt
                         mainViewModel?.debitBalance(amt)
                     } else {
-                        Toast.makeText(this, getString(R.string.not_enough_balance), Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.not_enough_balance),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
