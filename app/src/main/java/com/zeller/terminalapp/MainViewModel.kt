@@ -31,6 +31,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val balance: LiveData<Float> get() = _balance
 
 
+    //ToDo:Better way to do this something similar convert Flow to Live Data
     fun updateLiveDataFromDataStore() {
         viewModelScope.launch {
             getApplication<Application>().dataStore.data.catch { exception ->
@@ -54,8 +55,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun creditBalance(amt: Float) {
-
-//        _balance.value = _balance.value?.plus(amt)
         viewModelScope.launch {
             getApplication<Application>().dataStore.edit { balance_details ->
                 val currentBalance = balance_details[KEY_BALANCE] ?: 0.0f
@@ -65,7 +64,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun debitBalance(amt: Float) {
-        // _balance.value = _balance.value?.minus(amt)
         viewModelScope.launch {
             getApplication<Application>().dataStore.edit { balance_details ->
                 val currentBalance = balance_details[KEY_BALANCE] ?: 0.0f

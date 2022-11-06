@@ -1,5 +1,6 @@
 package com.zeller.terminalapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.depositButton.setOnClickListener(this)
         binding.withdrawButton.setOnClickListener(this)
+        binding.seeTransactionsButton.setOnClickListener(this)
         setContentView(binding.root)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mainViewModel?.updateLiveDataFromDataStore()
@@ -26,28 +28,61 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         val amt: Float
-        if (view?.id == R.id.withdrawButton) {
-            val balance = mainViewModel?.balance?.value
-            if (!binding.amountInput.text.isNullOrEmpty()) {
-                amt = binding.amountInput.text.toString().toFloat()
-                if (balance != null) {
-                    if (balance > amt) {
-                        //MainViewModel.balance -= amt
-                        mainViewModel?.debitBalance(amt)
-                    } else {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.not_enough_balance),
-                            Toast.LENGTH_LONG
-                        ).show()
+//        if (view?.id == R.id.withdrawButton) {
+//            val balance = mainViewModel?.balance?.value
+//            if (!binding.amountInput.text.isNullOrEmpty()) {
+//                amt = binding.amountInput.text.toString().toFloat()
+//                if (balance != null) {
+//                    if (balance > amt) {
+//                        //MainViewModel.balance -= amt
+//                        mainViewModel?.debitBalance(amt)
+//                    } else {
+//                        Toast.makeText(
+//                            this,
+//                            getString(R.string.not_enough_balance),
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                }
+//            }
+//
+//        } else if (view?.id == R.id.depositButton) {
+//            if (!binding.amountInput.text.isNullOrEmpty()) {
+//                amt = binding.amountInput.text.toString().toFloat()
+//                mainViewModel?.creditBalance(amt)
+//            }
+//        }
+
+        when (view?.id) {
+            R.id.withdrawButton -> {
+                val balance = mainViewModel?.balance?.value
+                if (!binding.amountInput.text.isNullOrEmpty()) {
+                    amt = binding.amountInput.text.toString().toFloat()
+                    if (balance != null) {
+                        if (balance > amt) {
+                            //MainViewModel.balance -= amt
+                            mainViewModel?.debitBalance(amt)
+                        } else {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.not_enough_balance),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
 
-        } else if (view?.id == R.id.depositButton) {
-            if (!binding.amountInput.text.isNullOrEmpty()) {
-                amt = binding.amountInput.text.toString().toFloat()
-                mainViewModel?.creditBalance(amt)
+            R.id.depositButton -> {
+                if (!binding.amountInput.text.isNullOrEmpty()) {
+                    amt = binding.amountInput.text.toString().toFloat()
+                    mainViewModel?.creditBalance(amt)
+                }
+            }
+
+            R.id.seeTransactionsButton -> {
+                val launchTransactionsActivity = Intent(this, TransactionsListView::class.java)
+                startActivity(launchTransactionsActivity)
             }
         }
     }
