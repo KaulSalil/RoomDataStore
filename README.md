@@ -6,5 +6,5 @@ Moved all the hardcoded stuff to the correct files
 
 Things I would have liked to do :
 Add DI
-Add testcases for testing the business logic of saving and fetching transactions
-Move the datastore related code written inside main view model to a repository class
+Add automated testcases for testing the business logic of saving and fetching transactions
+Move the datastore related code written inside main view model to a repository class for clean code
